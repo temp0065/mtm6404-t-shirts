@@ -92,19 +92,31 @@ const ProductPageBanner = ({title}) => {
 const Tshirts = (props) => {
   return (
     <>
-      <section className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-        {props.TshirtList.map(tshirt => <TshirtItem title={tshirt.title} img={tshirt.image} price={tshirt.price} stock={tshirt.stock} />)}
-      </section>
+      <main>
+        <p className="fs-5">{props.TshirtList.length} Results</p>
+        <section>
+          <h2>Plain T-Shirts</h2>
+          <section className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
+            {props.TshirtList.map(tshirt => <TshirtItem title={tshirt.title} img={tshirt.image} price={tshirt.price} stock={tshirt.stock} />)}
+          </section>
+        </section>
+      </main>
     </>
   );
 }
 
 const TshirtItem = ({title, img, price, stock}) => {
   const [tshirtStock, setTshirtStock] = React.useState(stock);
+  const [selectedQuantity, setSelectedQuantity] = React.useState(null);
 
-  const handleStockChange = (quantity) => {
-    setTshirtStock(tshirtStock - quantity);
+  const handleStockChange = (e) => {
+    e.preventDefault();
+    setTshirtStock(tshirtStock - selectedQuantity);
   };
+
+  const handleQuantitySelection = (e) => {
+    setSelectedQuantity(e.target.value);
+  }
 
   return (
     <>
@@ -113,10 +125,10 @@ const TshirtItem = ({title, img, price, stock}) => {
           <img src={`./images/${img}`} alt="T-shirt on wall." className="card-img-top"/>
           <div className="card-body">
             <h3 className="card-title">{title}</h3>
-            <p className="card-text">${price}</p>
-            <p>{stock} left</p>
-            {stock ? (
-              <TshirtInputField tshirtStock={tshirtStock} onClick={handleStockChange}/>
+            <p className="card-text fs-5">${price}</p>
+            <p>{tshirtStock} left</p>
+            {tshirtStock ? (
+              <TshirtInputField tshirtStock={tshirtStock} onSubmit={handleStockChange} onChange={handleQuantitySelection} />
             ) : (
               <h4 className="fs-5 text-warning">Out of Stock</h4>
             )}
@@ -132,18 +144,21 @@ const TshirtInputField = (props) => {
   const createSelectFields = (stock) => {
     const selectFields = [];
     for (let i = 1; i < stock+1; i++) {
-      selectFields.push(<option value={i} key={i}>{i}</option>)
+      // Select 1 as the default value
+      selectFields.push(<option value={i} key={i}>{i}</option>);
     };
     return selectFields;
   }
 
   return (
     <>
-      <label htmlFor="quantity-select">Quantity:</label>
-      <select name="quantity-select" id="quantity-select">
-        {createSelectFields(props.tshirtStock)}
-      </select>
-      <button className="btn btn-primary">Buy</button>
+      <form onSubmit={props.onSubmit}>
+        <label htmlFor="quantity-select">Quantity:</label>
+        <select className="form-select" name="quantity-select" id="quantity-select" onChange={props.onChange}>
+          {createSelectFields(props.tshirtStock)}
+        </select>
+        <input className="btn btn-primary" type="submit" value="Buy"/>
+      </form>
     </>
   );
 }
