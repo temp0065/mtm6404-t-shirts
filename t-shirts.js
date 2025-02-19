@@ -66,17 +66,6 @@ const tshirts = [
 
 const pageBannerTitle = 'T-Shirts';
 
-const App = () => {
-  const [TshirtList, setTshirtList] = React.useState(tshirts);
-
-  return (
-    <>
-      <ProductPageBanner title={pageBannerTitle} />
-      <Tshirts TshirtList={TshirtList} />
-    </>
-  );
-}
-
 const ProductPageBanner = ({title}) => {
 
   return (
@@ -89,15 +78,32 @@ const ProductPageBanner = ({title}) => {
   )
 }
 
-const Tshirts = (props) => {
+const App = () => {
+  const [tshirtList, setTshirtList] = React.useState(tshirts);
+
   return (
     <>
-      <main>
-        <p className="fs-5">{props.TshirtList.length} Results</p>
+      <ProductPageBanner title={pageBannerTitle} />
+      <Tshirts tshirtList={tshirtList} />
+    </>
+  );
+}
+
+
+const Tshirts = (props) => {
+  
+  const tshirtList = props.tshirtList.map((tshirt, id) => ({...tshirt, id}));
+
+  return (
+    <>
+      <main className="p-2 p-md-3">
         <section>
-          <h2>Plain T-Shirts</h2>
-          <section className="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-            {props.TshirtList.map(tshirt => <TshirtItem title={tshirt.title} img={tshirt.image} price={tshirt.price} stock={tshirt.stock} />)}
+          <div className="px-2 d-flex justify-content-between align-items-end">
+            <h2 className="mb-0">Plain T-Shirts</h2>
+            <p className="mb-0">{tshirtList.length} Results</p>
+          </div>
+          <section className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 w-100 m-auto">
+            {tshirtList.map(tshirt => <TshirtItem title={tshirt.title} img={tshirt.image} price={tshirt.price} stock={tshirt.stock} key={tshirt.id} />)}
           </section>
         </section>
       </main>
@@ -105,9 +111,9 @@ const Tshirts = (props) => {
   );
 }
 
-const TshirtItem = ({title, img, price, stock}) => {
+const TshirtItem = ({title, img, price, stock, key}) => {
   const [tshirtStock, setTshirtStock] = React.useState(stock);
-  const [selectedQuantity, setSelectedQuantity] = React.useState(null);
+  const [selectedQuantity, setSelectedQuantity] = React.useState(1);
 
   const handleStockChange = (e) => {
     e.preventDefault();
@@ -120,7 +126,7 @@ const TshirtItem = ({title, img, price, stock}) => {
 
   return (
     <>
-      <div className="col">
+      <div className="col" key={key}>
         <article className="card text-bg-dark h-100">
           <img src={`./images/${img}`} alt="T-shirt on wall." className="card-img-top"/>
           <div className="card-body">
@@ -128,7 +134,7 @@ const TshirtItem = ({title, img, price, stock}) => {
             <p className="card-text fs-5">${price}</p>
             <p>{tshirtStock} left</p>
             {tshirtStock ? (
-              <TshirtInputField tshirtStock={tshirtStock} onSubmit={handleStockChange} onChange={handleQuantitySelection} />
+              <TshirtInputField tshirtStock={tshirtStock} onStockChange={handleStockChange} onQuantitySelection={handleQuantitySelection} />
             ) : (
               <h4 className="fs-5 text-warning">Out of Stock</h4>
             )}
@@ -152,9 +158,9 @@ const TshirtInputField = (props) => {
 
   return (
     <>
-      <form onSubmit={props.onSubmit}>
+      <form onSubmit={props.onStockChange}>
         <label htmlFor="quantity-select">Quantity:</label>
-        <select className="form-select" name="quantity-select" id="quantity-select" onChange={props.onChange}>
+        <select className="form-select" name="quantity-select" id="quantity-select" onChange={props.onQuantitySelection}>
           {createSelectFields(props.tshirtStock)}
         </select>
         <input className="btn btn-primary" type="submit" value="Buy"/>

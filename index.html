@@ -12,9 +12,9 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg bg-body-primary">
+  <nav class="navbar navbar-expand-lg bg-dark p-3" data-bs-theme="dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar scroll</a>
+      <a class="navbar-brand" href="#">NShop</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -24,21 +24,17 @@
             <a class="nav-link active" aria-current="page" href="#">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="#">Headphones</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Link
+              Apparel
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+              <li><a class="dropdown-item" href="#">Shirts</a></li>
+              <li><a class="dropdown-item" href="#">Pants</a></li>
+              <li><a class="dropdown-item" href="#">Accesories</a></li>
             </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Link</a>
           </li>
         </ul>
         <form class="d-flex" role="search">
@@ -50,6 +46,9 @@
   </nav>
   <div id="root" class="container-fluid p-0"></div>
 
+  <footer class="bg-dark p-3 text-light d-flex align-items-center justify-content-center">
+    <p class="mb-0">2025 NShop</p>
+  </footer>
   <script type="text/babel" src="./t-shirts.js"></script>
 </body>
 </html>
